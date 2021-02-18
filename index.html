@@ -1,33 +1,69 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>d3.js data driven page </title>
+        <title>D3JS Dynamic Table</title>
+        <style>
+            h1 {color:rgb(71, 51, 185); font-size:40px;}
+            body {background-color:aliceblue; text-align:center;}
+            .name {color:rgb(71, 51, 185); font-weight: bolder;}
+                    
+          </style>
         <script src="https://d3js.org/d3.v6.min.js"></script>
-    
-    </head>
-    <body>
-        <p>This page is inspired by the <a href="https://observablehq.com/@d3/bar-chart-race" target="_blank"><b>Bar Chart Race</b></a> by <em>Mike Bostock</em> on the we site <a href="https://observablehq.com/">Observable</a>.</p>
-        <button onclick="colorP()"> Click me </button>
-        <table></table>
         <script>
-            d3.csv("https://raw.githubusercontent.com/pablo-qui/10_02/main/category-brands.csv",
-            (d,i,c) => {
-                if (i<25){
-                    d3.select("table")
+            function select() { 
+                d3.selectAll("table").remove()
+                if(document.getElementById("Options").value=="1"){
+                    csv_url_1 = false ? "data1.csv" : "https://raw.githubusercontent.com/pablo-qui/d3js_table/master/data1.csv"
+                    
+                  d3.csv(csv_url_1,
+                  (d,i,c) => {
+              
+                 d3.select("body").insert("table")
+                 .append("tr")
+                 .selectAll("td")
+                 .data(c).enter()
+                 .append("td").text(e => d[e])
+                 .attr("class", e => e)
+                 })
+                  
+                } else  {
+                    csv_url_2 = false ? "data2.csv" : "https://raw.githubusercontent.com/pablo-qui/d3js_table/master/data2.csv";
+                    d3.csv(csv_url_2,
+                    
+                    (d,i,c) => {
+                        d3.select("body").insert("table")
                         .append("tr")
                         .selectAll("td")
-                        .data(c)
-                        .enter()
-                        .append("td")
-                        .text(x => d[x])
+                        .data(c).enter()
+                        .append("td").text(e => d[e])
+                        .attr("class", e => e)
+                        }
+                    )    
+                        
+                    
                 }
             }
-            )
-            function colorP(){
-                d3.selectAll("p").style("color","red");
-            }
-        </script>
+                     
+            
+          </script>
+    </head>
+
+    <body>
+        <h1 title = "D3JS Dynamic Table">D3JS Dynamic Table</h1>
+        <p>
+           Please, select an option in order to see the data. 
+           <br>
+           <br>
+            <select id="Options" onChange="select()">
+                <option selected disabled>Select data set</option>
+                <option value="1">Data 1</option>
+                <option value="2">Data 2</option>
+            </select>
+            
     
-        
+            <br>
+            
+            <table></table>
+        </p>      
     </body>
 </html>
